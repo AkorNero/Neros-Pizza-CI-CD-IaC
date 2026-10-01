@@ -1,0 +1,32 @@
+# Terraform working directories (providers, modules, local backend config)
+.terraform/
+
+# State files — may contain secrets
+*.tfstate
+*.tfstate.*
+
+# Variable files — may contain credentials
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Local overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Saved plans, crash logs, CLI config
+*.tfplan
+crash.log
+crash.*.log
+.terraformrc
+terraform.rc
+
+# Lambda build artifacts
+.build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
