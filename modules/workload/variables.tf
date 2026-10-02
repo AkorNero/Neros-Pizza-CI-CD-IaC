@@ -2,7 +2,7 @@
 
 variable "name_prefix" {
   type        = string
-  default     = "test"
+  default     = "neros-pizza-test"
   description = "The prefix of the service's name, value should be of environment"
 }
 
@@ -35,17 +35,17 @@ variable "worker_timeout_seconds" {
   default     = 10
 }
 
-# variable "api_log_group_name" {
-#   description = "Log group for the orders-api Lambda"
-#   type        = string
-# }
+variable "api_log_group_name" {
+  description = "Log group for the orders-api Lambda"
+  type        = string
+}
 
-# variable "worker_log_group_name" {
-#   description = "Log group for the orders-worker Lambda"
-#   type        = string
-# }
+variable "worker_log_group_name" {
+  description = "Log group for the orders-worker Lambda"
+  type        = string
+}
 
-# variable "access_log_group_arn" {
-#   description = "Log group ARN for API Gateway access logs"
-#   type        = string
-# }
+variable "access_log_group_arn" {
+  description = "Log group ARN for API Gateway access logs"
+  type        = string
+}

@@ -7,8 +7,8 @@ output "test_commands" {
   description = "Copy-paste smoke tests"
   value = {
     health      = "curl ${module.workload.api_endpoint}/health"
-    place_order = "curl -X POST ${module.workload.api_endpoint}/orders -d '{\"amount\": 42}'"
-    poison      = "curl -X POST ${module.workload.api_endpoint}/orders -d '{\"amount\": 1, \"poison\": true}'"
+    place_order = "curl -X POST ${module.workload.api_endpoint}/orders -H \"Content-Type: application/json\" -d \"{\"amount\": 42}\""
+    poison      = "curl -X POST ${module.workload.api_endpoint}/orders -H \"Content-Type: application/json\" -d \"{\"amount\": 1, \"poison\": true}\""
   }
 }
 

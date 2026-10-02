@@ -30,19 +30,19 @@ resource "aws_apigatewayv2_stage" "order_api" {
   name        = "$default"
   auto_deploy = true
 
-  # access_log_settings {
-  #   destination_arn = var.access_log_group_arn
-  #   format = jsonencode({
-  #     requestId          = "$context.requestId"
-  #     routeKey           = "$context.routeKey"
-  #     status             = "$context.status"
-  #     responseLatency    = "$context.responseLatency"
-  #     integrationLatency = "$context.integrationLatency"
-  #     integrationError   = "$context.integrationErrorMessage"
-  #     sourceIp           = "$context.identity.sourceIp"
-  #     requestTime        = "$context.requestTime"
-  #   })
-  # }
+  access_log_settings {
+    destination_arn = var.access_log_group_arn
+    format = jsonencode({
+      requestId          = "$context.requestId"
+      routeKey           = "$context.routeKey"
+      status             = "$context.status"
+      responseLatency    = "$context.responseLatency"
+      integrationLatency = "$context.integrationLatency"
+      integrationError   = "$context.integrationErrorMessage"
+      sourceIp           = "$context.identity.sourceIp"
+      requestTime        = "$context.requestTime"
+    })
+  }
 
   default_route_settings {
     detailed_metrics_enabled = true

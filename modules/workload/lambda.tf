@@ -29,10 +29,10 @@ resource "aws_lambda_function" "order_api" {
     }
   }
 
-  # logging_config {
-  #   log_format = "Text"
-  #   log_group = var.api_log_group_name
-  # }
+  logging_config {
+    log_format = "Text"
+    log_group = var.api_log_group_name
+  }
 }
 
 resource "aws_lambda_function" "order_worker" {
@@ -49,10 +49,10 @@ resource "aws_lambda_function" "order_worker" {
     }
   }
 
-  # logging_config {
-  #   log_format = "Text"
-  #   log_group = var.worker_log_group_name
-  # }
+  logging_config {
+    log_format = "Text"
+    log_group = var.worker_log_group_name
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "order_queue_poller" {

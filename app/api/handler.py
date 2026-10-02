@@ -27,12 +27,12 @@ def log(level, **fields):
 
 
 def emf(order_value):
-    """Embedded Metric Format line -> CWLab/Orders custom metrics."""
+    """Embedded Metric Format line -> "NerosPizza/Orders" custom metrics."""
     print(json.dumps({
         "_aws": {
             "Timestamp": int(time.time() * 1000),
             "CloudWatchMetrics": [{
-                "Namespace": "CWLab/Orders",
+                "Namespace": "NerosPizza/Orders",
                 "Dimensions": [["Service"]],
                 "Metrics": [
                     {"Name": "OrdersPlaced", "Unit": "Count"},

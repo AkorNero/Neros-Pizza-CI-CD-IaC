@@ -15,10 +15,6 @@ terraform {
   }
 }
 
-locals {
-  now = plantimestamp()
-}
-
 provider "aws" {
   region     = "eu-west-1"
   access_key = var.access_key
@@ -27,12 +23,19 @@ provider "aws" {
     tags = {
       Environment = var.env,
       ManagedBy   = "terraform"
-      UpdatedAt   = local.now
-      Project     = "nero-s-pizza"
+      Project     = "neros-pizza-test"
     }
   }
 }
 
+module "logging" {
+  source = "../../modules/logging"
+}
+
 module "workload" {
   source = "../../modules/workload"
+  failure_rate = 0.2
+  access_log_group_arn = module.logging.access_log_group_arn
+  api_log_group_name = module.logging.api_log_group_name
+  worker_log_group_name = module.logging.worker_log_group_name
 }
