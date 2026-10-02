@@ -1,4 +1,3 @@
-# archive_file x2, aws_lambda_function x2, event source mapping
 data "archive_file" "order_api_archive" {
   type        = "zip"
   source_dir  = "${path.root}/../../app/api"

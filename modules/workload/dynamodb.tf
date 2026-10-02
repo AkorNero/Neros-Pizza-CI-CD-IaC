@@ -1,4 +1,3 @@
-# aws_dynamodb_table
 resource "aws_dynamodb_table" "order_table" {
   name         = "${var.name_prefix}-order-table"
   billing_mode = "PAY_PER_REQUEST"

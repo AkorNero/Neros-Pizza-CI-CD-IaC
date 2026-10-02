@@ -1,4 +1,3 @@
-# two roles, attachments, inline policy
 resource "aws_iam_role" "order_api_role" {
   name = "${var.name_prefix}-order-api-role"
   assume_role_policy = jsonencode({
@@ -9,6 +8,14 @@ resource "aws_iam_role" "order_api_role" {
         Effect = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
+        }
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.name_prefix}-*"
+          }
         }
       }
     ]
@@ -25,6 +32,14 @@ resource "aws_iam_role" "order_worker_role" {
         Effect = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
+        }
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.name_prefix}-*"
+          }
         }
       }
     ]

@@ -1,5 +1,3 @@
-# name_prefix, failure_rate, extra_latency_ms, api_timeout, log group ARNs/names, source dirs
-
 variable "name_prefix" {
   type        = string
   default     = "neros-pizza-test"

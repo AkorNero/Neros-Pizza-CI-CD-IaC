@@ -1,4 +1,3 @@
-# api_id, api_url, stage name, function names, queue names/ARNs, table name
 # ---------- API Gateway ----------
 output "api_id" {
   description = "HTTP API id (ApiId dimension for API Gateway metrics)"

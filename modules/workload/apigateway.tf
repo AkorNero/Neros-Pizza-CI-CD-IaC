@@ -1,4 +1,3 @@
-# api, integration, routes, stage, lambda permission
 resource "aws_apigatewayv2_api" "order_api" {
   name          = "${var.name_prefix}-order-api"
   protocol_type = "HTTP"
