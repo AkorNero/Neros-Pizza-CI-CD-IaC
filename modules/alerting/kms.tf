@@ -41,5 +41,5 @@ resource "aws_kms_key" "topic_enc_key" {
 
 resource "aws_kms_alias" "topic_enc_key_alias" {
   name="alias/${var.name_prefix}-alert"
-  target_key_id = aws_kms_key.topic_enc_key.key_id # names must start with alias/
+  target_key_id = aws_kms_key.topic_enc_key.key_id # names must start with alias/ and alias/aws/sns or aws managed keys cant be accessed by cloudwatch
 }

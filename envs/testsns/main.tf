@@ -28,7 +28,7 @@ provider "aws" {
   }
 }
 
-module "logging" {
+module "alerting" {
   source = "../../modules/alerting"
   alert_email = var.alert_email
 }

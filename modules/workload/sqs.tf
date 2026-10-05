@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "dead_letter_queue" {
-  name                      = "${var.name_prefix}-dql"
+  name                      = "${var.name_prefix}-dlq"
   message_retention_seconds = 1209600 # 14 days: time to investigate (maximum possible time frame)
 }
 

@@ -4,7 +4,7 @@ resource "aws_cloudwatch_query_definition" "top_errors_query" {
   query_string = <<-EOT
   fields @timestamp, message, route
   | filter level = "ERROR"
-  | stats count(*) as error by route
+  | stats count(*) as errors by route
   | sort errors desc
   EOT
 }
