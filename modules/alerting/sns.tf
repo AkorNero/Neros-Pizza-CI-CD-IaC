@@ -1,10 +1,3 @@
-locals {
-  alert_topics = {
-    critical = "Neros Pizza CRITICAL"
-    warning  = "Neros Pizza warning"
-  }
-}
-
 resource "aws_sns_topic" "alerts" {
   for_each          = local.alert_topics
   name              = "${var.name_prefix}-${each.key}"

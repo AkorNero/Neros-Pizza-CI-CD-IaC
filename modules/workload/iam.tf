@@ -46,10 +46,6 @@ resource "aws_iam_role" "order_worker_role" {
   })
 }
 
-locals {
-  order_worker_mng_policies = [data.aws_iam_policy.lambda_basic_exe_policy, data.aws_iam_policy.lambda_sqs_exe_policy]
-}
-
 resource "aws_iam_role_policy_attachment" "order_api_role_managed_policies" {
   role       = aws_iam_role.order_api_role.name
   policy_arn = data.aws_iam_policy.lambda_basic_exe_policy.arn

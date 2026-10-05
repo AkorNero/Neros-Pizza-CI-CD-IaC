@@ -10,13 +10,6 @@ resource "aws_apigatewayv2_integration" "order_api_integration" {
   payload_format_version = "2.0"
 }
 
-locals {
-  api_routes = toset([
-    "POST /orders",
-    "GET /health",
-  ])
-}
-
 resource "aws_apigatewayv2_route" "order_api_order_route" {
   for_each  = local.api_routes
   api_id    = aws_apigatewayv2_api.order_api.id
