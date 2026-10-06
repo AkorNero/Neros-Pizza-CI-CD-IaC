@@ -9,7 +9,7 @@ variable "alert_email" {
 variable "env" {
   type        = string
   description = "The environment you are deploying the infrastructure for"
-  default     = "test"
+  default     = "neros-pizza-test"
 }
 
 variable "access_key" {

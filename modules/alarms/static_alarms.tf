@@ -13,6 +13,6 @@ resource "aws_cloudwatch_metric_alarm" "static" {
   threshold           = each.value.threshold
   comparison_operator = each.value.comparison_operator
   treat_missing_data  = each.value.treat_missing_data
-  alarm_actions       = [local.topics[each.value.severity]]
-  ok_actions          = [local.topics[each.value.severity]]
+  alarm_actions       = each.value.severity != "page" ? [local.topics[each.value.severity]] : null
+  ok_actions          = each.value.severity != "page" ? [local.topics[each.value.severity]] : null
 }

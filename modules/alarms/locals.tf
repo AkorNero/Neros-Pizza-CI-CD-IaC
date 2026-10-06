@@ -103,85 +103,88 @@ locals {
       treat_missing_data  = "notBreaching"
       severity            = "warning"
     }
-  }, var.canary_alarm_name == null ? {} : { "canary-failing" = {
-    description         = "Synthetic canary success below 90% for 10 min: users likely can't place orders. Check the canary run screenshots/logs, then API 5xx and Lambda errors."
-    namespace           = "CloudWatchSynthetics"
-    metric_name         = "SuccessPercent"
-    dimensions          = { CanaryName = var.canary_alarm_name }
-    statistic           = "Average"
-    period              = 300
-    evaluation_periods  = 2
-    datapoints_to_alarm = 2
-    threshold           = 90
-    comparison_operator = "LessThanThreshold"
-    treat_missing_data  = "breaching"
-    severity            = "page"
-  }})
+    }, var.canary_alarm_name == null ? {} : { "canary-failing" = {
+      description         = "Synthetic canary success below 90% for 10 min: users likely can't place orders. Check the canary run screenshots/logs, then API 5xx and Lambda errors."
+      namespace           = "CloudWatchSynthetics"
+      metric_name         = "SuccessPercent"
+      dimensions          = { CanaryName = var.canary_alarm_name }
+      statistic           = "Average"
+      period              = 300
+      evaluation_periods  = 2
+      datapoints_to_alarm = 2
+      threshold           = 90
+      comparison_operator = "LessThanThreshold"
+      treat_missing_data  = "breaching"
+      severity            = "page"
+  } })
 
   math_alarms = {
     "dynamodb_errors" = {
-      description = "DynamoDB system errors or throttles on PutItem. check AWS Health Dashboard and table capacity."
-      severity = "warning"
-      treat_missing_data = "notBreaching"
-      evaluation_periods = 1
+      description         = "DynamoDB system errors or throttles on PutItem. check AWS Health Dashboard and table capacity."
+      severity            = "warning"
+      treat_missing_data  = "notBreaching"
+      evaluation_periods  = 1
       datapoints_to_alarm = 1
-      threshold = 0
+      threshold           = 0
       comparison_operator = "GreaterThanThreshold"
-      expression = "FILL(m1, 0) + FILL(m2, 0)"
-      period = 60
+      expression          = "FILL(m1, 0) + FILL(m2, 0)"
+      period              = 60
       metrics = {
-        m1 = {namespace = "AWS/DynamoDB", name = "SystemErrors",      dims = { TableName = var.table_name, Operation = "PutItem" }, stat = "Sum"}
+        m1 = { namespace = "AWS/DynamoDB", name = "SystemErrors", dims = { TableName = var.table_name, Operation = "PutItem" }, stat = "Sum" }
         m2 = { namespace = "AWS/DynamoDB", name = "ThrottledRequests", dims = { TableName = var.table_name, Operation = "PutItem" }, stat = "Sum" }
       }
     }
     "api_5xx_rate" = {
-      description = "API 5xx error rate above ${var.thresholds.api_5xx_rate_percent}% of requests: users are seeing server errors. Check orders-api Lambda errors and the top-errors saved query."
-      severity = "page"
-      treat_missing_data = "notBreaching"
-      evaluation_periods = 5
+      description         = "API 5xx error rate above ${var.thresholds.api_5xx_rate_percent}% of requests: users are seeing server errors. Check orders-api Lambda errors and the top-errors saved query."
+      severity            = "page"
+      treat_missing_data  = "notBreaching"
+      evaluation_periods  = 5
       datapoints_to_alarm = 3
-      threshold = var.thresholds.api_5xx_rate_percent
+      threshold           = var.thresholds.api_5xx_rate_percent
       comparison_operator = "GreaterThanThreshold"
-      expression = "IF(m2 > 0, 100 * m1 / m2, 0)"
-      period = 60
+      expression          = "IF(m2 > 0, 100 * m1 / m2, 0)"
+      period              = 60
       metrics = {
-        m1 = {namespace = "AWS/ApiGateway", name = "5xx",      dims = { ApiId = var.api_id , Stage = var.api_stage_name }, stat = "Sum"}
-        m2 = { namespace = "AWS/ApiGateway", name = "Count", dims = { ApiId = var.api_id , Stage = var.api_stage_name }, stat = "Sum" }
+        m1 = { namespace = "AWS/ApiGateway", name = "5xx", dims = { ApiId = var.api_id, Stage = var.api_stage_name }, stat = "Sum" }
+        m2 = { namespace = "AWS/ApiGateway", name = "Count", dims = { ApiId = var.api_id, Stage = var.api_stage_name }, stat = "Sum" }
       }
     }
   }
 
   percentile_alarm = {
     "api-p99-latency" = {
-      description = "API p99 latency above ${var.thresholds.api_p99_latency_ms} ms: the slowest 1% of requests are too slow. Compare Latency vs IntegrationLatency, then run the slowest-requests saved query."
-      namespace           = "AWS/ApiGateway"
-      metric_name         = "Latency"
-      dimensions          = { ApiId = var.api_id , Stage = var.api_stage_name }
-      extended_statistic  = "p99"
-      period              = 60
-      evaluation_periods  = 5
-      datapoints_to_alarm = 3
-      threshold           = var.thresholds.api_p99_latency_ms
-      comparison_operator = "GreaterThanThreshold"
-      treat_missing_data  = "notBreaching"
-      severity            = "warning"
+      description                           = "API p99 latency above ${var.thresholds.api_p99_latency_ms} ms: the slowest 1% of requests are too slow. Compare Latency vs IntegrationLatency, then run the slowest-requests saved query."
+      namespace                             = "AWS/ApiGateway"
+      metric_name                           = "Latency"
+      dimensions                            = { ApiId = var.api_id, Stage = var.api_stage_name }
+      extended_statistic                    = "p99"
+      period                                = 60
+      evaluation_periods                    = 5
+      datapoints_to_alarm                   = 3
+      threshold                             = var.thresholds.api_p99_latency_ms
+      comparison_operator                   = "GreaterThanThreshold"
+      treat_missing_data                    = "notBreaching"
+      severity                              = "warning"
       evaluate_low_sample_count_percentiles = "ignore"
     }
     "duration-near-timeout" = {
-      description = "orders-api p95 duration above ${var.thresholds.duration_timeout_ratio * 100}% of its ${var.api_function_timeout_ms} ms timeout: requests are close to timing out. Check DynamoDB/SQS latency and cold starts."
-      namespace           = "AWS/Lambda"
-      metric_name         = "Duration"
-      dimensions          = { FunctionName = var.api_function_name }
-      extended_statistic  = "p95"
-      period              = 60
-      evaluation_periods  = 5
-      datapoints_to_alarm = 3
-      threshold           = var.api_function_timeout_ms * var.thresholds.duration_timeout_ratio
-      comparison_operator = "GreaterThanThreshold"
-      treat_missing_data  = "notBreaching"
-      severity            = "warning"
+      description                           = "orders-api p95 duration above ${var.thresholds.duration_timeout_ratio * 100}% of its ${var.api_function_timeout_ms} ms timeout: requests are close to timing out. Check DynamoDB/SQS latency and cold starts."
+      namespace                             = "AWS/Lambda"
+      metric_name                           = "Duration"
+      dimensions                            = { FunctionName = var.api_function_name }
+      extended_statistic                    = "p95"
+      period                                = 60
+      evaluation_periods                    = 5
+      datapoints_to_alarm                   = 3
+      threshold                             = var.api_function_timeout_ms * var.thresholds.duration_timeout_ratio
+      comparison_operator                   = "GreaterThanThreshold"
+      treat_missing_data                    = "notBreaching"
+      severity                              = "warning"
       evaluate_low_sample_count_percentiles = "ignore"
     }
   }
-  page_alarm_names = ["api_5xx_rate","canary-failing"]
+  page_alarm_names = concat(
+    [aws_cloudwatch_metric_alarm.math["api_5xx_rate"].alarm_name],
+    var.canary_name == null ? [] : [aws_cloudwatch_metric_alarm.static["canary-failing"].alarm_name]
+  )
 }

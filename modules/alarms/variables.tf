@@ -2,7 +2,7 @@
 variable "name_prefix" {
   description = "Prefix for every alarm name, e.g. neros-pizza-test"
   type        = string
-  default = "neros-pizza-test"
+  default     = "neros-pizza-test"
 }
 
 # ---------- Alerting (from module.alerting) ----------
@@ -88,11 +88,15 @@ variable "emf_service_name" {
   default     = "orders"
 }
 
-# ---------- Phase 7 (optional until the canary exists) ----------
+# ---------- canary ----------
 variable "canary_alarm_name" {
   description = "Name of the canary-failing alarm to add to the composite"
   type        = string
   default     = null
+}
+
+variable "canary_name" {
+  type=string
 }
 
 # ---------- Tunable thresholds (override in terraform.tfvars) ----------
